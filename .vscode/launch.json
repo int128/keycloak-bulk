@@ -2,13 +2,45 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Chrome",
+      "type": "node",
+      "request": "launch",
+      "name": "apiserver",
+      "cwd": "${workspaceFolder}/apiserver",
+      "program": "${workspaceFolder}/apiserver/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "cwd": "${workspaceFolder}/frontend"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "wsl/apiserver",
+      "useWSL": true,
+      "cwd": "${workspaceFolder}/apiserver",
+      "program": "${workspaceFolder}/apiserver/index.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "wsl/frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["start"],
+      "cwd": "${workspaceFolder}/frontend",
+      "useWSL": true
+    },
+    {
+      "name": "chrome",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000",
-      "webRoot": "${workspaceRoot}/src",
+      "webRoot": "${workspaceRoot}/frontend/src",
       "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
+        "webpack:///frontend/src/*": "${webRoot}/*"
       }
     }
   ]

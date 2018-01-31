@@ -2,12 +2,16 @@
   "name": "keycloak-bulk-frontend",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:5000",
   "dependencies": {
+    "immutable": "^4.0.0-rc.9",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-scripts": "1.1.0",
-    "redux": "^3.7.2"
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-pack": "^0.1.5"
   },
   "scripts": {
     "start": "react-scripts start",

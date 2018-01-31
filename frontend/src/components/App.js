@@ -1,13 +1,16 @@
 import React from 'react'
-import Footer from './Footer'
-import AddTodo from '../containers/AddTodo'
-import VisibleTodoList from '../containers/VisibleTodoList'
+import ActiveTabContent from '../containers/ActiveTabContent'
+import NavigationBar from '../containers/NavigationBar';
 
 const App = () => (
   <div>
-    <AddTodo />
-    <VisibleTodoList />
-    <Footer />
+    <NavigationBar />
+    <div className="container">
+      <ActiveTabContent />
+    </div>
+    <div className="mt-5 p-3 bg-dark">
+      <p>Keycloak Bulk</p>
+    </div>
   </div>
 )
 
