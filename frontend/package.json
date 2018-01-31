@@ -1,5 +1,5 @@
 {
-  "name": "keycloak-bulk",
+  "name": "keycloak-bulk-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
