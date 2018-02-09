@@ -7,15 +7,20 @@ module.exports = class httpClient {
   }
 
   async fetch(uri, method, body, contentType) {
-    const response = await fetch(uri, {
+    const options = {
+      method,
       headers: {
         authorization: this.session.getTokenSetAsAuthorizationHeader(),
-        'content-type': contentType,
         accept: 'application/json',
       },
-      method,
-      body: (body !== undefined) ? JSON.stringify(body) : undefined,
-    });
+    };
+    if (body !== undefined) {
+      options.body = body;
+    }
+    if (contentType !== undefined) {
+      options.headers['content-type'] = contentType
+    }
+    const response = await fetch(uri, options);
     if (response.status === 401) {
       const oidc = await OIDC.create();
       this.session.setTokenSet(await oidc.refresh(this.session.getTokenSet()));

@@ -1,27 +1,33 @@
-const express = require('express');
-const morgan = require('morgan');
-const session = require('express-session');
+const Koa = require('koa');
+const koaStatic = require('koa-static');
+const koaSession = require('koa-session');
+const koaBody = require('koa-body');
 const crypto = require('crypto');
 
-const oidc = require('./routes/oidc');
-const keycloak = require('./routes/keycloak');
-const healthCheck = require('./routes/healthCheck');
-const errorHandler = require('./routes/errorHandler');
+const router = require('./router');
 
-const app = express();
+const app = new Koa();
 
-app.use(morgan('combined', {skip: req => req.path === '/healthz'}));
+app.keys = [crypto.randomBytes(32).toString('hex')];
+app.use(koaSession(app));
+app.use(koaBody());
 
-app.use(session({
-  secret: crypto.randomBytes(32).toString('hex'),
-  resave: false,
-  saveUninitialized: false,
-}));
+app.use(router.routes());
+app.use(router.allowedMethods());
+app.use(koaStatic('public'));
 
-app.use(oidc);
-app.use(keycloak);
-
-app.use(healthCheck);
-app.use(errorHandler);
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    if (err.name === 'OpenIdConnectError') {
+      ctx.status = 401;
+      ctx.body = { error: err.error, error_message: err.error_description };
+    } else {
+      ctx.status = err.statusCode || err.status || 500;
+      ctx.body = { error_message: err.message };
+    }
+  }
+});
 
 app.listen(5000);

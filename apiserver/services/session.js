@@ -5,12 +5,13 @@ module.exports = class Session {
     this.session = session;
   }
 
-  getAuthorizationRequest() {
-    return this.session.authorizationRequest;
+  getAuthenticationRequest() {
+    return this.session.authenticationRequest;
   }
 
-  setAuthorizationRequest(authorizationRequest) {
-    this.session.authorizationRequest = authorizationRequest;
+  setAuthenticationRequest(authenticationRequest) {
+    this.session.authenticationRequest = authenticationRequest;
+    this.session.tokenSet = undefined;
   }
 
   /**
@@ -42,6 +43,8 @@ module.exports = class Session {
   }
 
   setTokenSet(tokenSet) {
-    this.session.tokenSet = tokenSet;
+    const { token_type, access_token, expires_at } = tokenSet;
+    this.session.tokenSet = { token_type, access_token, expires_at };
+    this.session.authorizationRequest = undefined;
   }
 }

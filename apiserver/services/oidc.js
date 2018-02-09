@@ -2,15 +2,6 @@ const { Issuer } = require('openid-client');
 const crypto = require('crypto');
 const config = require('../config');
 
-class AuthenticationRequest {
-  constructor(url, redirectUri, state, nonce) {
-    this.url = url;
-    this.redirectUri = redirectUri;
-    this.state = state;
-    this.nonce = nonce;
-  }
-}
-
 module.exports = class OIDC {
   static async create() {
     const issuer = await Issuer.discover(config.OIDC_ISSUER);
@@ -26,21 +17,21 @@ module.exports = class OIDC {
     this.client = client;
   }
 
-  getAuthorizationRequest(redirectUri) {
+  getAuthenticationRequest(redirect_uri) {
     const state = crypto.randomBytes(32).toString('hex');
     const nonce = crypto.randomBytes(32).toString('hex');
-    const url = this.client.authorizationUrl({
-      redirect_uri: redirectUri,
+    const authorization_url = this.client.authorizationUrl({
+      redirect_uri,
       scope: 'openid email',
       state,
       nonce
     });
-    return new AuthenticationRequest(url, redirectUri, state, nonce);
+    return { authorization_url, redirect_uri, state, nonce };
   }
 
   async getTokenSet(authorizationRequest, query) {
-    const {redirectUri, state, nonce} = authorizationRequest;
-    return await this.client.authorizationCallback(redirectUri, query, {state, nonce});
+    const { redirect_uri, state, nonce } = authorizationRequest;
+    return await this.client.authorizationCallback(redirect_uri, query, { state, nonce });
   }
 
   async refresh(tokenSet) {
