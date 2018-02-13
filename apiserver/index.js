@@ -21,7 +21,7 @@ app.use(async (ctx, next) => {
   }
 });
 
-app.use(koaStatic('public'));
+app.use(koaStatic('static'));
 app.use(koaBody());
 
 app.use(router.routes());
