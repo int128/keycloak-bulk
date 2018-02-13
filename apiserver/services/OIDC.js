@@ -1,5 +1,7 @@
 const { Issuer } = require('openid-client');
 const crypto = require('crypto');
+const jsonwebtoken = require('jsonwebtoken');
+const SessionToken = require('./SessionToken');
 const config = require('../config');
 
 module.exports = class OIDC {
@@ -17,7 +19,7 @@ module.exports = class OIDC {
     this.client = client;
   }
 
-  getAuthenticationRequest(redirect_uri) {
+  createAuthenticationRequest(redirect_uri) {
     const state = crypto.randomBytes(32).toString('hex');
     const nonce = crypto.randomBytes(32).toString('hex');
     const authorization_url = this.client.authorizationUrl({
@@ -26,15 +28,17 @@ module.exports = class OIDC {
       state,
       nonce
     });
-    return { authorization_url, redirect_uri, state, nonce };
+    const jwt = jsonwebtoken.sign({ redirect_uri, state, nonce }, config.JWT_SECRET);
+    return { authorization_url, jwt };
   }
 
-  async getTokenSet(authorizationRequest, query) {
-    const { redirect_uri, state, nonce } = authorizationRequest;
-    return await this.client.authorizationCallback(redirect_uri, query, { state, nonce });
+  async getSessionToken(redirect_uri, state, nonce, query) {
+    const tokenSet = await this.client.authorizationCallback(redirect_uri, query, { state, nonce });
+    return new SessionToken(tokenSet);
   }
 
-  async refresh(tokenSet) {
-    return await this.client.refresh(tokenSet.refresh_token);
+  async refreshSessionToken(current_refresh_token) {
+    const tokenSet = await this.client.refresh(current_refresh_token);
+    return new SessionToken(tokenSet);
   }
 }

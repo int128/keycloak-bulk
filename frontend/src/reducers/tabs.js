@@ -1,7 +1,8 @@
 import * as types from '../actions/types';
 
 const TABS = [
-  { name: 'import', label: 'Import', active: true },
+  { name: 'home', label: 'Home', active: true },
+  { name: 'import', label: 'Import' },
   { name: 'export', label: 'Export' },
 ]
 

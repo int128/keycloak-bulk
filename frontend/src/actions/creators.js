@@ -1,5 +1,6 @@
 import * as types from './types'
 import keycloak from '../services/Keycloak'
+import oidc from '../services/OIDC'
 
 export const loadUsers = () => ({
   type: types.LOAD_USERS,
@@ -32,4 +33,14 @@ export const notifyImportUser = (index, resource) => ({
 export const selectTab = name => ({
   type: types.SELECT_TAB,
   name
+})
+
+export const signin = () => ({
+  type: types.OIDC_SIGN_IN,
+  promise: oidc.signin()
+})
+
+export const createSession = () => ({
+  type: types.OIDC_CREATE_SESSION,
+  promise: oidc.createSession()
 })

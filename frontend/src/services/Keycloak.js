@@ -1,4 +1,5 @@
-import User from '../models/User'
+import oidc from './OIDC';
+import User from '../models/User';
 import ResourceError from '../models/ResourceError';
 import Resource from '../models/Resource';
 
@@ -59,13 +60,16 @@ class Keycloak {
   /**
    * Fetch JSON.
    * @param {string} uri 
-   * @param {object} options 
+   * @param {RequestInit} options 
    */
-  async fetchJSON(uri, options) {
+  async fetchJSON(uri, options = {}) {
     let response;
     let value;
     try {
-      response = await fetch(uri, { credentials: 'same-origin', ...options });
+      response = await fetch(uri, {
+        ...options,
+        headers: { authorization: oidc.getAuthorizationHeader(), ...options.headers },
+      });
       value = await response.json();
     } catch (e) {
       throw new ResourceError({ code: typeof e, message: `${e}` });

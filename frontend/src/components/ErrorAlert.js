@@ -6,7 +6,7 @@ const ErrorAlert = ({ error }) => {
   if (error.status === 401) {
     return (
       <div className="alert alert-info" role="alert">
-        Session expired. Please <a href="/login">relogin</a>.
+        Session has been expired. Please <a href="#signin">sign in</a>.
       </div>
     )
   }

@@ -8,7 +8,9 @@ const onClick = (name, onSelect) => e => {
 
 const NavigationBar = ({ tabs, onSelect }) => (
   <nav className="navbar navbar-expand navbar-dark bg-dark">
-    <a className="navbar-brand" href="/">Keycloak Bulk</a>
+    <a className="navbar-brand" href="#home" onClick={onClick('home', onSelect)}>
+      Keycloak Bulk
+    </a>
     <ul className="navbar-nav mr-auto">
       {tabs.map(({ name, label, active }) => (
         <li key={name} className={`nav-item ${active === true ? 'active' : ''}`}>
