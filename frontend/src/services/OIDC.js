@@ -34,7 +34,11 @@ class OIDC {
   }
 
   async refreshSession() {
-    //TODO
+    const { jwt } = await this.fetchJSON(`/api/oidc/sessions/refresh`, {
+      method: 'POST',
+      headers: { authorization: this.getAuthorizationHeader() },
+    });
+    sessionStorage.setItem(SESSION_STORAGE_JWT, jwt);
   }
 
   /**

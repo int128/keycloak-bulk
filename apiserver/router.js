@@ -26,6 +26,13 @@ router.post('/api/oidc/sessions', async ctx => {
   ctx.body = { jwt: sessionToken.toJwt(config.JWT_SECRET) };
 });
 
+router.post('/api/oidc/sessions/refresh', async ctx => {
+  const { refresh_token } = ctx.state.user;
+  const oidc = await OIDC.create();
+  const sessionToken = await oidc.refreshSessionToken(refresh_token);
+  ctx.body = { jwt: sessionToken.toJwt(config.JWT_SECRET) };
+});
+
 const proxy = async ctx => {
   const sessionToken = new SessionToken(ctx.state.user);
   if (sessionToken.isValid()) {

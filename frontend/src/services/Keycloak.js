@@ -61,23 +61,31 @@ class Keycloak {
    * Fetch JSON.
    * @param {string} uri 
    * @param {RequestInit} options 
+   * @param {number} retryCount
    */
-  async fetchJSON(uri, options = {}) {
+  async fetchJSON(uri, options = {}, retryCount = 0) {
     let response;
     let value;
     try {
       response = await fetch(uri, {
         ...options,
-        headers: { authorization: oidc.getAuthorizationHeader(), ...options.headers },
+        headers: {
+          authorization: oidc.getAuthorizationHeader(),
+          'x-retry-count': retryCount,
+          ...options.headers
+        }
       });
       value = await response.json();
     } catch (e) {
       throw new ResourceError({ code: typeof e, message: `${e}` });
     }
+    const status = response.status;
     if (response.ok) {
       return value;
+    } else if (status === 401 && retryCount === 0) {
+      await oidc.refreshSession();
+      return await this.fetchJSON(uri, options, retryCount + 1);
     } else {
-      const status = response.status;
       throw new ResourceError({ code: value.error, message: value.error_message, status });
     }
   }
