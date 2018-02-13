@@ -35,9 +35,9 @@ export const selectTab = name => ({
   name
 })
 
-export const signin = () => ({
+export const signIn = () => ({
   type: types.OIDC_SIGN_IN,
-  promise: oidc.signin()
+  promise: oidc.signIn()
 })
 
 export const createSession = () => ({

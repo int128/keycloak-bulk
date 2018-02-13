@@ -1,37 +1,28 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 
-const onClick = (name, onSelect) => e => {
-  e.preventDefault();
-  onSelect(name);
-}
-
-const NavigationBar = ({ tabs, onSelect }) => (
+const NavigationBar = ({ pathname, isAuthenticated }) => (
   <nav className="navbar navbar-expand navbar-dark bg-dark">
-    <a className="navbar-brand" href="#home" onClick={onClick('home', onSelect)}>
+    <Link className="navbar-brand" to="/">
       Keycloak Bulk
-    </a>
-    <ul className="navbar-nav mr-auto">
-      {tabs.map(({ name, label, active }) => (
-        <li key={name} className={`nav-item ${active === true ? 'active' : ''}`}>
-          <a className="nav-link" href={`#${name}`} onClick={onClick(name, onSelect)}>
-            {label}
-          </a>
+    </Link>
+    {isAuthenticated ? (
+      <ul className="navbar-nav mr-auto">
+        <li className={`nav-item ${pathname === '/import' ? 'active' : ''}`}>
+          <Link className="nav-link" to="/import">Import</Link>
         </li>
-      ))}
-    </ul>
+        <li className={`nav-item ${pathname === '/export' ? 'active' : ''}`}>
+          <Link className="nav-link" to="/export">Export</Link>
+        </li>
+      </ul>
+    ) : null}
   </nav>
 )
 
 NavigationBar.propTypes = {
-  tabs: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
-      active: PropTypes.bool,
-    }).isRequired
-  ),
-  onSelect: PropTypes.func.isRequired,
+  pathname: PropTypes.string.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 }
 
 export default NavigationBar

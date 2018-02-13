@@ -1,18 +1,20 @@
 import { connect } from 'react-redux'
-import TabContent from '../components/TabContent'
+import * as creators from '../actions/creators'
+import SignInProgress from '../components/SignInProgress';
 
 const mapStateToProps = state => {
   return {
-    name: state.tabs.filter(tab => tab.active === true).map(tab => tab.name).join(),
+    signInRequest: state.signInRequest,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    onMount: () => dispatch(creators.signIn()),
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TabContent)
+)(SignInProgress)

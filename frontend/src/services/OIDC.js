@@ -13,8 +13,8 @@ class OIDC {
     }
   }
 
-  async signin({ location } = window) {
-    const redirect_uri = location.origin;
+  async signIn({ location } = window) {  //TODO: handle LOCATION_CHANGE action
+    const redirect_uri = `${location.origin}/signin/callback`;
     const { authorization_url, jwt } = await this.fetchJSON('/api/oidc/authentication-request', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -24,7 +24,7 @@ class OIDC {
     location.replace(authorization_url);
   }
 
-  async createSession({ location } = window) {
+  async createSession({ location } = window) {  //TODO: handle LOCATION_CHANGE action
     const { jwt } = await this.fetchJSON(`/api/oidc/sessions${location.search}`, {
       method: 'POST',
       headers: { authorization: this.getAuthorizationHeader() },

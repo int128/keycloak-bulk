@@ -2,24 +2,28 @@ import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore, applyMiddleware } from 'redux'
+import { routerMiddleware, ConnectedRouter } from 'react-router-redux'
+import createHistory from 'history/createBrowserHistory'
 import { middleware as reduxPack } from 'redux-pack'
 import reduxPackDispatch from './utils/redux-pack-dispatch'
 import reduxLogger from 'redux-logger'
 import reducers from './reducers'
-import * as actionCreators from './actions/creators'
 import App from './components/App'
 import {} from './index.css'
 
-const store = createStore(reducers,
-  applyMiddleware(reduxPackDispatch, reduxPack, reduxLogger))
+const history = createHistory()
 
-if (window.location.search) {
-  store.dispatch(actionCreators.createSession())
-}
+const store = createStore(reducers, applyMiddleware(
+  routerMiddleware(history),
+  reduxPackDispatch,
+  reduxPack,
+  reduxLogger))
 
 render(
   <Provider store={store}>
-    <App />
+    <ConnectedRouter history={history}>
+      <App />
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('root')
 )
