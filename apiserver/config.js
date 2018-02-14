@@ -14,4 +14,5 @@ module.exports = {
   OIDC_CLIENT_SECRET: process.env.OIDC_CLIENT_SECRET,
   KEYCLOAK_API_URI: process.env.KEYCLOAK_API_URI || issuerToKeycloakAPI(process.env.OIDC_ISSUER),
   JWT_SECRET: process.env.JWT_SECRET || crypto.randomBytes(32),
+  STATIC_ROOT: 'static',
 };

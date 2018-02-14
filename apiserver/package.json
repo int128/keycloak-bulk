@@ -17,6 +17,7 @@
     "koa-body": "^2.5.0",
     "koa-jwt": "^3.3.0",
     "koa-router": "^7.4.0",
+    "koa-send": "^4.1.2",
     "koa-static": "^4.0.2",
     "node-fetch": "^2.0.0",
     "openid-client": "^1.19.4"
