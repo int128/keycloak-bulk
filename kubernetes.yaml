@@ -1,0 +1,71 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: keycloak-bulk
+spec:
+  rules:
+  - host: keycloak-bulk.example.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: keycloak-bulk
+          servicePort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak-bulk
+spec:
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+  selector:
+    app: keycloak-bulk
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: keycloak-bulk
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: keycloak-bulk
+    spec:
+      containers:
+      - name: keycloak-bulk
+        image: int128/keycloak-bulk:1.0
+        env:
+        - name: OIDC_ISSUER
+          value: https://keycloak.example.com/auth/realms/YOUR_REALM
+        - name: OIDC_CLIENT_ID
+          value: keycloak-bulk
+        - name: OIDC_CLIENT_SECRET
+          value: 80a00dd6-7419-44a1-864d-ac8e44ebf68e
+        ports:
+        - name: http
+          containerPort: 5000
+        resources:
+          limits:
+            memory: 128Mi
+          requests:
+            memory: 128Mi
+            cpu: 500m
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 5000
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          timeoutSeconds: 5

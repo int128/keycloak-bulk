@@ -8,6 +8,7 @@ FROM node:9
 ADD apiserver /apiserver
 COPY --from=frontend /frontend/build /apiserver/static
 WORKDIR /apiserver
+EXPOSE 5000
 ENV NODE_ENV production
 RUN ["npm", "install"]
 CMD ["npm", "start"]
