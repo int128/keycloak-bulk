@@ -2,6 +2,8 @@
 
 A bulk operation tool for the Keycloak identity manager.
 
+<img src="https://user-images.githubusercontent.com/321266/36188352-f01caa14-118e-11e8-8c51-89ad29ba9af0.png" width="720"/>
+
 ## Getting Started
 
 ### 1. Create OIDC client
