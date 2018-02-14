@@ -1,0 +1,33 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:9
+    working_directory: ~/keycloak-bulk
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "apiserver/package.json" }}-{{ checksum "frontend/package.json" }}
+          - v1-dependencies-
+      - run:
+          command: npm install
+          working_directory: apiserver
+      - run:
+          command: npm install
+          working_directory: frontend
+      - save_cache:
+          paths:
+            - apiserver/node_modules
+            - frontend/node_modules
+          key: v1-dependencies-{{ checksum "apiserver/package.json" }}-{{ checksum "frontend/package.json" }}
+
+      - run:
+          command: npm run eslint
+          working_directory: apiserver
+      - run:
+          command: npm run eslint
+          working_directory: frontend
+      - store_test_results:
+          path: build/eslint

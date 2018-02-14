@@ -20,7 +20,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "eslint": "eslint --format=junit -o ../build/eslint/frontend.xml ."
   },
   "devDependencies": {
     "redux-devtools": "^3.4.1"

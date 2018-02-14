@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "eslint": "eslint --format=junit -o build/eslint.xml ."
+    "eslint": "eslint --format=junit -o ../build/eslint/apiserver.xml ."
   },
   "devDependencies": {
     "eslint": "^4.16.0"

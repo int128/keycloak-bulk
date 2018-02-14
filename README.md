@@ -1,4 +1,4 @@
-# Keycloak Bulk
+# Keycloak Bulk [![CircleCI](https://circleci.com/gh/int128/keycloak-bulk.svg?style=shield)](https://circleci.com/gh/int128/keycloak-bulk)
 
 A bulk operation tool for the Keycloak identity manager.
 
